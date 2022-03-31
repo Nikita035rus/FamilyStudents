@@ -8,7 +8,7 @@ public class Adult extends Person
     private String passportNumber;
     private LocalDate issueDate;
     private PassportOffice issueDepartment;
-    private University univesity;
+    private University university;
     private String studentId;
 
     public Adult() {
@@ -51,11 +51,11 @@ public class Adult extends Person
     }
 
     public University getUnivesity() {
-        return univesity;
+        return university;
     }
 
     public void setUnivesity(University univesity) {
-        this.univesity = univesity;
+        this.university = univesity;
     }
 
     public String getStudentId() {
@@ -73,7 +73,7 @@ public class Adult extends Person
                 ", passportNumber='" + passportNumber + '\'' +
                 ", issueDate=" + issueDate +
                 ", issueDepartment=" + issueDepartment +
-                ", univesity=" + univesity +
+                ", univesity=" + university +
                 ", studentId='" + studentId + '\'' +
                 "} " + super.toString();
     }

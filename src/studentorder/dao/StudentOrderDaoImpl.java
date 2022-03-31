@@ -61,7 +61,7 @@ public class StudentOrderDaoImpl implements StudentOrderDao {
                 stmt.setLong(30, so.getMarriageOffice().getOfficeId());
                 stmt.setDate(31, java.sql.Date.valueOf(so.getMarriageDate()));
 
-                stmt.executeUpdate();//модификация данных, возвращает целое число, сколько было изменений
+                stmt.executeUpdate();//возвращает целое число, сколько было изменений
 
                 ResultSet gkRs = stmt.getGeneratedKeys();
                 if (gkRs.next()) {
@@ -87,11 +87,13 @@ public class StudentOrderDaoImpl implements StudentOrderDao {
 
     private void saveChildren(Connection con, StudentOrder so, long soId) throws SQLException {
         try (PreparedStatement stmt = con.prepareStatement(INSERT_CHILD)) {
+
             for (Child child : so.getChildren()) {
                 stmt.setLong(1, soId);
                 setParamsForChild(stmt, child);
-                stmt.executeUpdate();
+                stmt.addBatch();//добавление в пакет записей
             }
+                stmt.executeBatch();//выгрузка из пакетов
         }
     }
 
@@ -129,6 +131,4 @@ public class StudentOrderDaoImpl implements StudentOrderDao {
         stmt.setString(start++, h_address.getExtension());
         stmt.setString(start++, h_address.getApartment());
     }
-
-
 }
