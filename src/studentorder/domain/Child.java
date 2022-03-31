@@ -5,13 +5,10 @@ import java.time.LocalDate;
 public class Child extends Person{
     private String certificateNumber;
     private LocalDate issueDate;
-    private RegisterOffice registerOffice;
+    private RegisterOffice issueDepartment;
 
-    public Child(String name,
-                 String surName,
-                 String patronymic,
-                 LocalDate dateOfBirthday) {
-        super(name, surName, patronymic, dateOfBirthday);
+    public Child(String surName, String givenName, String patronymic, LocalDate dateOfBirth) {
+        super(surName, givenName, patronymic, dateOfBirth);
     }
 
     public String getCertificateNumber() {
@@ -30,11 +27,20 @@ public class Child extends Person{
         this.issueDate = issueDate;
     }
 
-    public RegisterOffice getRegisterOffice() {
-        return registerOffice;
+    public RegisterOffice getIssueDepartment() {
+        return issueDepartment;
     }
 
-    public void setRegisterOffice(RegisterOffice registerOffice) {
-        this.registerOffice = registerOffice;
+    public void setIssueDepartment(RegisterOffice issueDepartment) {
+        this.issueDepartment = issueDepartment;
+    }
+
+    @Override
+    public String toString() {
+        return "Child{" +
+                "certificateNumber='" + certificateNumber + '\'' +
+                ", issueDate=" + issueDate +
+                ", issueDepartment=" + issueDepartment +
+                "} " + super.toString();
     }
 }
