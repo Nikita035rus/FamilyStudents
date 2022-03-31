@@ -1,19 +1,18 @@
 package studentorder.student_order;
 
-import org.postgresql.Driver;
+import studentorder.dao.DictionaryDaoImpl;
+import studentorder.domain.Street;
 import studentorder.domain.StudentOrder;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.util.List;
 
 public class SaveStudentOrder {
 
     public static void main(String[] args) throws Exception{
-       //  Class.forName("org.postgresql.Driver");
-
-
+        List<Street> d = new DictionaryDaoImpl().findStreets("q");
+        for(Street s:d){
+            System.out.println(s.getStreetName());
+        }
     }
     static void saveStudentOrder(){
     }

@@ -6,29 +6,15 @@ public class Adult extends Person {
     private String passportSeria;
     private String passportNumber;
     private LocalDate issueDate;
-    private String issueDepartment;
+    private PassportOffice passportOffice;
     private String university;
     private String studentId;
 
     public Adult() {
     }
 
-    public Adult(String name,
-                 String surName,
-                 String patronymic,
-                 LocalDate dateOfBirthday,
-                 String passportSeria,
-                 String passportNumber,
-                 LocalDate issueDate,
-                 String issueDepartment,
-                 String university, String studentId) {
+    public Adult(String name, String surName, String patronymic, LocalDate dateOfBirthday) {
         super(name, surName, patronymic, dateOfBirthday);
-        this.passportSeria = passportSeria;
-        this.passportNumber = passportNumber;
-        this.issueDate = issueDate;
-        this.issueDepartment = issueDepartment;
-        this.university = university;
-        this.studentId = studentId;
     }
 
     public String getUniversity() {
@@ -71,11 +57,11 @@ public class Adult extends Person {
         this.issueDate = issueDate;
     }
 
-    public String getIssueDepartment() {
-        return issueDepartment;
+    public PassportOffice getPassportOffice() {
+        return passportOffice;
     }
 
-    public void setIssueDepartment(String issueDepartment) {
-        this.issueDepartment = issueDepartment;
+    public void setPassportOffice(PassportOffice passportOffice) {
+        this.passportOffice = passportOffice;
     }
 }

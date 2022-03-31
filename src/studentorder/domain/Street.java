@@ -2,14 +2,14 @@ package studentorder.domain;
 
 public class Street {
     private long street_code;
-    private String name;
+    private String streetName;
 
     public Street() {
     }
 
     public Street(long street_code, String name) {
         this.street_code = street_code;
-        this.name = name;
+        this.streetName = name;
     }
 
     public long getStreet_code() {
@@ -20,11 +20,11 @@ public class Street {
         this.street_code = street_code;
     }
 
-    public String getName() {
-        return name;
+    public String getStreetName() {
+        return streetName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.streetName = name;
     }
 }

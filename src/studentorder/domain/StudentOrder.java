@@ -5,20 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentOrder {
-   private long studentOrderId;
-   private Adult husband;
-   private Adult wife;
-   private List<Child> children;
-   private String marriageCertification;
-   private String marriageOffice;
-   private LocalDate marriageDate;
+    private long studentOrderId;
+    private Adult husband;
+    private Adult wife;
+    private List<Child> children;
+    private String marriageCertification;
+    private RegisterOffice registerOffice;
+    private LocalDate marriageDate;
 
-public void addChild(Child child){
-    if(children == null){
-        children = new ArrayList<>(5);
+    public void addChild(Child child) {
+        if (children == null) {
+            children = new ArrayList<>(5);
+        }
+        children.add(child);
     }
-    children.add(child);
-}
 
     public long getStudentOrderId() {
         return studentOrderId;
@@ -60,12 +60,12 @@ public void addChild(Child child){
         this.marriageCertification = marriageCertification;
     }
 
-    public String getMarriageOffice() {
-        return marriageOffice;
+    public RegisterOffice getRegisterOffice() {
+        return registerOffice;
     }
 
-    public void setMarriageOffice(String marriageOffice) {
-        this.marriageOffice = marriageOffice;
+    public void setRegisterOffice(RegisterOffice registerOffice) {
+        this.registerOffice = registerOffice;
     }
 
     public LocalDate getMarriageDate() {
