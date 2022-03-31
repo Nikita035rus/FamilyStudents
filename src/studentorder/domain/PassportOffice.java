@@ -17,7 +17,7 @@ public class PassportOffice {
     public PassportOffice(Long aLong, String street_name) {
     }
 
-    public Long getOfficeID() {
+    public Long getOfficeId() {
         return officeID;
     }
 

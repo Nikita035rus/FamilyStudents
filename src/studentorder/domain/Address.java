@@ -1,18 +1,21 @@
 package studentorder.domain;
 
 public class Address {
+    private String postCode;
     private Street street;
     private String building;
     private String extension;
-    private String flat;
-    private String postCode;
+    private String apartment;
 
-    public Address(Street street, String building, String extension, String flat, String postCode) {
+    public Address() {
+    }
+
+    public Address(String postCode, Street street, String building, String extension, String apartment) {
+        this.postCode = postCode;
         this.street = street;
         this.building = building;
         this.extension = extension;
-        this.flat = flat;
-        this.postCode = postCode;
+        this.apartment = apartment;
     }
 
     public String getPostCode() {
@@ -47,11 +50,22 @@ public class Address {
         this.extension = extension;
     }
 
-    public String getFlat() {
-        return flat;
+    public String getApartment() {
+        return apartment;
     }
 
-    public void setFlat(String flat) {
-        this.flat = flat;
+    public void setApartment(String apartment) {
+        this.apartment = apartment;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "postCode='" + postCode + '\'' +
+                ", street=" + street +
+                ", building='" + building + '\'' +
+                ", extension='" + extension + '\'' +
+                ", apartment='" + apartment + '\'' +
+                '}';
     }
 }

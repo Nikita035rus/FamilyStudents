@@ -1,23 +1,35 @@
 package studentorder.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentOrder {
     private long studentOrderId;
+    private StudentOrderStatus studentOrderStatus;
+    private LocalDateTime studentOrderDate;
     private Adult husband;
     private Adult wife;
     private List<Child> children;
-    private String marriageCertification;
-    private RegisterOffice registerOffice;
+    private String marriageCertificateId;
+    private RegisterOffice marriageOffice;
     private LocalDate marriageDate;
 
-    public void addChild(Child child) {
-        if (children == null) {
-            children = new ArrayList<>(5);
-        }
-        children.add(child);
+    public StudentOrderStatus getStudentOrderStatus() {
+        return studentOrderStatus;
+    }
+
+    public void setStudentOrderStatus(StudentOrderStatus studentOrderStatus) {
+        this.studentOrderStatus = studentOrderStatus;
+    }
+
+    public LocalDateTime getStudentOrderDate() {
+        return studentOrderDate;
+    }
+
+    public void setStudentOrderDate(LocalDateTime studentOrderDate) {
+        this.studentOrderDate = studentOrderDate;
     }
 
     public long getStudentOrderId() {
@@ -44,28 +56,31 @@ public class StudentOrder {
         this.wife = wife;
     }
 
+    public void addChild(Child child) {
+        if (children == null) {
+            children = new ArrayList<>(5);
+        }
+        children.add(child);
+    }
+
     public List<Child> getChildren() {
         return children;
     }
 
-    public void setChildren(List<Child> children) {
-        this.children = children;
+    public String getMarriageCertificateId() {
+        return marriageCertificateId;
     }
 
-    public String getMarriageCertification() {
-        return marriageCertification;
+    public void setMarriageCertificateId(String marriageCertificateId) {
+        this.marriageCertificateId = marriageCertificateId;
     }
 
-    public void setMarriageCertification(String marriageCertification) {
-        this.marriageCertification = marriageCertification;
+    public RegisterOffice getMarriageOffice() {
+        return marriageOffice;
     }
 
-    public RegisterOffice getRegisterOffice() {
-        return registerOffice;
-    }
-
-    public void setRegisterOffice(RegisterOffice registerOffice) {
-        this.registerOffice = registerOffice;
+    public void setMarriageOffice(RegisterOffice marriageOffice) {
+        this.marriageOffice = marriageOffice;
     }
 
     public LocalDate getMarriageDate() {
@@ -74,5 +89,20 @@ public class StudentOrder {
 
     public void setMarriageDate(LocalDate marriageDate) {
         this.marriageDate = marriageDate;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentOrder{" +
+                "studentOrderId=" + studentOrderId +
+                ", studentOrderStatus=" + studentOrderStatus +
+                ", studentOrderDate=" + studentOrderDate +
+                ", husband=" + husband +
+                ", wife=" + wife +
+                ", children=" + children +
+                ", marriageCertificateId='" + marriageCertificateId + '\'' +
+                ", marriageOffice=" + marriageOffice +
+                ", marriageDate=" + marriageDate +
+                '}';
     }
 }
