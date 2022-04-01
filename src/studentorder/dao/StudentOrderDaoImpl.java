@@ -163,7 +163,7 @@ public class StudentOrderDaoImpl implements StudentOrderDao {
         stmt.setString(start++, person.getSurName());
         stmt.setString(start++, person.getName());
         stmt.setString(start++, person.getPatronymic());
-        stmt.setDate(start++, Date.valueOf(person.getDateOfBirthday()));
+        stmt.setDate(start, Date.valueOf(person.getDateOfBirthday()));
         return start;
     }
 
@@ -173,7 +173,7 @@ public class StudentOrderDaoImpl implements StudentOrderDao {
         stmt.setLong(start++, h_address.getStreet().getStreet_code());
         stmt.setString(start++, h_address.getBuilding());
         stmt.setString(start++, h_address.getExtension());
-        stmt.setString(start++, h_address.getApartment());
+        stmt.setString(start, h_address.getApartment());
     }
 
     private Adult fillAdult(ResultSet rs, String pref) throws SQLException {
@@ -185,39 +185,36 @@ public class StudentOrderDaoImpl implements StudentOrderDao {
         adult.setPassportSeria(rs.getString(pref + "passport_seria"));
         adult.setPassportNumber(rs.getString(pref + "passport_number"));
         adult.setIssueDate(rs.getDate(pref + "passport_date").toLocalDate());
-
-        PassportOffice po = new PassportOffice(
-                rs.getLong(pref + "passport_office_id"), "", "");
-
-        po.setOfficeID(rs.getLong(pref + "passport_office_id"));
-
-
-//        adult.setName(rs.getString(pref+"post_index"));
-//        adult.setName(rs.getString(pref+"street_code"));
-//        adult.setName(rs.getString(pref+"extension"));
-//        adult.setName(rs.getString(pref+"apartment"));
-//        adult.setName(rs.getString(pref+"university_id"));
-//        adult.setName(rs.getString(pref+"student_number"));
-
-
-        Address adr = fillAddress(rs, pref);
-
-        Street st = new Street(rs.getLong(pref + "street_code"), "");
-        adr.setStreet(st);
-
-        University uni = new University(rs.getLong(pref + "university_id"), "");
-
-
-        adult.setUniversity(uni);
-        adult.setIssueDepartment(po);
-        adult.setAddress(adr);
+        adult.setIssueDepartment(fillPassportOffice(rs, pref));
+        adult.setAddress(fillAddress(rs, pref));
+        adult.setUniversity(fillUniversity(rs, pref));
         adult.setStudentId(rs.getString(pref + "student_number"));
         return adult;
+    }
+
+    private University fillUniversity(ResultSet rs, String pref) throws SQLException {
+        return new University(
+                rs.getLong(pref + "university_id"),
+                rs.getString(pref +"university_name"));
+    }
+
+    private Street fillStreet(ResultSet rs, String pref) throws SQLException {
+        long str = rs.getLong(pref + "street_code");
+        String strName = rs.getString(pref +"street_name");
+        return new Street(str,strName);
+    }
+
+    private PassportOffice fillPassportOffice(ResultSet rs, String pref) throws SQLException {
+        Long poId = rs.getLong(pref + "passport_office_id");
+        String poArea = rs.getString(pref + "p_office_area_id");
+        String poName = rs.getString(pref + "p_office_name");
+        return new PassportOffice(poId, poArea, poName);
     }
 
     private Address fillAddress(ResultSet rs, String pref) throws SQLException {
         Address adr = new Address();
         adr.setPostCode(rs.getString(pref + "post_index"));
+        adr.setStreet(fillStreet(rs, pref));
         adr.setBuilding(rs.getString(pref + "building"));
         adr.setExtension(rs.getString(pref + "extension"));
         adr.setApartment(rs.getString(pref + "apartment"));
