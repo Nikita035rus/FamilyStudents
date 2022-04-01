@@ -5,14 +5,17 @@ import studentorder.domain.*;
 import studentorder.exception.DaoException;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class StudentOrderDaoImpl implements StudentOrderDao {
 
     private static final String INSERT_ORDER =
-            "INSERT INTO public.jc_student_order(" +
+            "INSERT INTO jc_student_order(" +
                     "student_order_id, student_order_status, student_order_date, " +
                     "h_sur_name, h_given_name, h_patronymic, h_date_of_birthday, " +
                     "h_passport_seria, h_passport_number, h_passport_date, " +
@@ -46,6 +49,12 @@ public class StudentOrderDaoImpl implements StudentOrderDao {
                     "inner join jc_passport_office po_w on po_w.p_office_id = so.w_passport_office_id " +
                     "where student_order_status = 0 " +
                     "order by student_order_date ";
+
+    private static final String SELECT_CHILD =
+            "select soc. *, ro.r_office_area_id, ro.r_office_name " +
+                    "from jc_student_child soc " +
+                    "inner join jc_register_office ro on r_office_id = soc.c_register_office_id " +
+                    "where student_order_id in ";
 
     //TODO refactoring - make one method
     private Connection getConnection() throws SQLException {
@@ -107,8 +116,10 @@ public class StudentOrderDaoImpl implements StudentOrderDao {
 
         try (Connection con = getConnection();
              PreparedStatement stmt = con.prepareStatement(SELECT_ORDERS)) {
+            stmt.setInt(1, StudentOrderStatus.START.ordinal());
 
             ResultSet rs = stmt.executeQuery();
+
             while (rs.next()) {
                 StudentOrder so = new StudentOrder();
                 fillStudentOrder(rs, so);
@@ -121,10 +132,47 @@ public class StudentOrderDaoImpl implements StudentOrderDao {
 
                 result.add(so);
             }
+            findChildren(con, result);
+
         } catch (SQLException e) {
             throw new DaoException(e);
         }
         return result;
+    }
+
+    private void findChildren(Connection con, List<StudentOrder> result) throws SQLException {
+        String cl = "(" + result.stream().map(so -> String.valueOf(so.getStudentOrderId()))
+                .collect(Collectors.joining(",")) + ")";
+        Map<Long, StudentOrder> maps = result.stream()
+                .collect(Collectors
+                        .toMap(StudentOrder::getStudentOrderId, so -> so));
+        try (PreparedStatement stmt = con.prepareStatement(SELECT_CHILD + cl)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Child ch = fillChild(rs);
+                StudentOrder so = maps.get(rs.getLong("student_order_id"));
+                so.addChild(ch);
+            }
+        }
+    }
+
+    private Child fillChild(ResultSet rs) throws SQLException {
+        String surName = rs.getString("c_surName");
+        String givenName = rs.getString("c_given_name");
+        String patronymic = rs.getString("c_patronymic");
+        LocalDate dateOfBirth = rs.getDate("c_date_of_birth").toLocalDate();
+
+        Child child = new Child(surName, givenName, patronymic, dateOfBirth);
+        child.setCertificateNumber(rs.getString("c_certificate_number"));
+        child.setIssueDate(rs.getDate("c_certificate_date").toLocalDate());
+
+        Long roId = rs.getLong("c_register_office_id");
+        String roArea = rs.getString("r_office_area_id");
+        String roName = rs.getString("r_office_name");
+        RegisterOffice ro = new RegisterOffice(roId, roArea, roName);
+        child.setIssueDepartment(ro);
+        child.setAddress(fillAddress(rs, "c_"));
+        return child;
     }
 
     private void saveChildren(Connection con, StudentOrder so, long soId) throws SQLException {
@@ -195,13 +243,13 @@ public class StudentOrderDaoImpl implements StudentOrderDao {
     private University fillUniversity(ResultSet rs, String pref) throws SQLException {
         return new University(
                 rs.getLong(pref + "university_id"),
-                rs.getString(pref +"university_name"));
+                rs.getString(pref + "university_name"));
     }
 
     private Street fillStreet(ResultSet rs, String pref) throws SQLException {
         long str = rs.getLong(pref + "street_code");
-        String strName = rs.getString(pref +"street_name");
-        return new Street(str,strName);
+        String strName = rs.getString(pref + "street_name");
+        return new Street(str, strName);
     }
 
     private PassportOffice fillPassportOffice(ResultSet rs, String pref) throws SQLException {
