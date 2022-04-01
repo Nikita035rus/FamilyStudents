@@ -37,6 +37,11 @@ public class SaveStudentOrder {
         StudentOrderDao dao = new StudentOrderDaoImpl();
         Long id = dao.saveStudentOrder(s);
         System.out.println(id);
+
+        List<StudentOrder> studentOrders = dao.getStudentOrders();
+        for(StudentOrder so : studentOrders){
+            System.out.println(so.toString());
+        }
     }
     static long saveStudentOrder(StudentOrder studentOrder){
         long answer = 199;

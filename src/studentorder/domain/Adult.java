@@ -50,11 +50,11 @@ public class Adult extends Person
         this.issueDepartment = issueDepartment;
     }
 
-    public University getUnivesity() {
+    public University getUniversity() {
         return university;
     }
 
-    public void setUnivesity(University univesity) {
+    public void setUniversity(University univesity) {
         this.university = univesity;
     }
 
